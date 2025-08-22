@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "surface_types",
+  "info": {
+    "singularName": "surface-type",
+    "pluralName": "surface-types",
+    "displayName": "Surface-Type"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "surface_name": {
+      "type": "string"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "mappedBy": "surface_types"
+    }
+  }
+}
