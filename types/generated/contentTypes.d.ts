@@ -373,6 +373,42 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBecomeAPartenerBecomeAPartener
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'become_a_parteners';
+  info: {
+    displayName: 'Become-a-partener';
+    pluralName: 'become-a-parteners';
+    singularName: 'become-a-partener';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    business_experience: Schema.Attribute.String;
+    business_type: Schema.Attribute.String;
+    company_name: Schema.Attribute.String;
+    country: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.String;
+    full_name: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::become-a-partener.become-a-partener'
+    > &
+      Schema.Attribute.Private;
+    partnership_interests: Schema.Attribute.String;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
   collectionName: 'blogs';
   info: {
@@ -1102,6 +1138,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::become-a-partener.become-a-partener': ApiBecomeAPartenerBecomeAPartener;
       'api::blog.blog': ApiBlogBlog;
       'api::color.color': ApiColorColor;
       'api::contact.contact': ApiContactContact;
