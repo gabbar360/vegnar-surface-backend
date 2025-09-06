@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "amount": {
+      "type": "integer",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "default": "INR"
+    },
+    "currentStatus": {
+      "type": "enumeration",
+      "required": false,
+      "default": "created",
+      "enum": [
+        "created",
+        " paid",
+        " failed",
+        "refunded"
+      ]
+    },
+    "razorpay_order_id": {
+      "type": "string",
+      "required": true
+    },
+    "razorpay_payment_id": {
+      "type": "string"
+    },
+    "razorpay_signature": {
+      "type": "string"
+    },
+    "receipt": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "json"
+    }
+  }
+}
