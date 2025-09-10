@@ -45,6 +45,32 @@
     },
     "notes": {
       "type": "json"
+    },
+    "full_name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "shipping_address": {
+      "type": "text",
+      "required": true
+    },
+    "additional_message": {
+      "type": "text"
+    },
+    "phone_number": {
+      "type": "string",
+      "required": true
+    },
+    "company": {
+      "type": "string"
+    },
+    "number_of_samples": {
+      "type": "integer",
+      "required": true
     }
   }
 }
