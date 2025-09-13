@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_analytics",
+  "info": {
+    "singularName": "user-analytic",
+    "pluralName": "user-analytics",
+    "displayName": "User-analytic"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "session_id": {
+      "type": "string"
+    },
+    "consent_type": {
+      "type": "string"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "user_agent": {
+      "type": "text"
+    },
+    "pages_visited": {
+      "type": "json"
+    },
+    "total_pages": {
+      "type": "integer"
+    },
+    "session_duration": {
+      "type": "integer"
+    }
+  }
+}
