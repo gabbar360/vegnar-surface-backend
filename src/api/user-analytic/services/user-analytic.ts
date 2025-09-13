@@ -45,32 +45,74 @@ export default factories.createCoreService('api::user-analytic.user-analytic', (
   },
 
   getClientIP(request) {
-    return request?.headers['x-forwarded-for']?.split(',')[0] || 
-           request?.headers['x-real-ip'] || 
-           request?.connection?.remoteAddress || 
-           '127.0.0.1';
+    // Try multiple IP detection methods for live servers
+    const ip = request?.headers['cf-connecting-ip'] ||  // Cloudflare
+               request?.headers['x-forwarded-for']?.split(',')[0]?.trim() || // Proxy
+               request?.headers['x-real-ip'] || // Nginx
+               request?.headers['x-client-ip'] || // Apache
+               request?.headers['x-forwarded'] || 
+               request?.headers['forwarded-for'] ||
+               request?.headers['forwarded'] ||
+               request?.connection?.remoteAddress ||
+               request?.socket?.remoteAddress ||
+               '127.0.0.1';
+    
+    console.log('🌐 Detected IP:', ip);
+    return ip;
   },
 
   async getLocationFromIP(ip) {
     try {
-      // Always get real public IP for accurate geolocation
-      console.log('🌍 Getting real public IP for geolocation...');
-      const publicIPResponse = await axios.get('https://api.ipify.org?format=json');
-      const realIP = publicIPResponse.data.ip;
-      console.log('🌍 Real public IP:', realIP);
+      let targetIP = ip;
       
-      const response = await axios.get(`http://ip-api.com/json/${realIP}`);
-      console.log('🌍 Geolocation response:', response.data);
-      
-      if (response.data.status === 'success') {
-        return {
-          country: response.data.country,
-          country_code: response.data.countryCode,
-          city: response.data.city
-        };
+      // If localhost or private IP, get public IP
+      if (ip === '127.0.0.1' || ip === '::1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.')) {
+        console.log('🌍 Private IP detected, getting public IP...');
+        try {
+          const publicIPResponse = await axios.get('https://api.ipify.org?format=json', { timeout: 5000 });
+          targetIP = publicIPResponse.data.ip;
+          console.log('🌍 Public IP:', targetIP);
+        } catch (error) {
+          console.log('🌍 Could not get public IP, using original:', ip);
+        }
       }
+      
+      console.log('🌍 Using IP for geolocation:', targetIP);
+      
+      // Try primary geolocation service
+      try {
+        const response = await axios.get(`http://ip-api.com/json/${targetIP}`, { timeout: 5000 });
+        console.log('🌍 Primary geolocation response:', response.data);
+        
+        if (response.data.status === 'success') {
+          return {
+            country: response.data.country,
+            country_code: response.data.countryCode,
+            city: response.data.city
+          };
+        }
+      } catch (error) {
+        console.log('🌍 Primary geolocation failed, trying backup...');
+      }
+      
+      // Try backup geolocation service
+      try {
+        const backupResponse = await axios.get(`https://ipapi.co/${targetIP}/json/`, { timeout: 5000 });
+        console.log('🌍 Backup geolocation response:', backupResponse.data);
+        
+        if (backupResponse.data.country_name) {
+          return {
+            country: backupResponse.data.country_name,
+            country_code: backupResponse.data.country_code,
+            city: backupResponse.data.city
+          };
+        }
+      } catch (error) {
+        console.log('🌍 Backup geolocation also failed');
+      }
+      
     } catch (error) {
-      console.error('🌍 IP geolocation failed:', error.message);
+      console.error('🌍 All geolocation attempts failed:', error.message);
     }
     
     return {
