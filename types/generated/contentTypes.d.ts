@@ -708,6 +708,44 @@ export interface ApiSurfaceTypeSurfaceType extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiUserAnalyticUserAnalytic
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'user_analytics';
+  info: {
+    displayName: 'User-analytic';
+    pluralName: 'user-analytics';
+    singularName: 'user-analytic';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Schema.Attribute.String;
+    consent_type: Schema.Attribute.String;
+    country: Schema.Attribute.String;
+    country_code: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ip_address: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::user-analytic.user-analytic'
+    > &
+      Schema.Attribute.Private;
+    pages_visited: Schema.Attribute.JSON;
+    publishedAt: Schema.Attribute.DateTime;
+    session_duration: Schema.Attribute.Integer;
+    session_id: Schema.Attribute.String;
+    total_pages: Schema.Attribute.Integer;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user_agent: Schema.Attribute.Text;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1227,6 +1265,7 @@ declare module '@strapi/strapi' {
       'api::product.product': ApiProductProduct;
       'api::size.size': ApiSizeSize;
       'api::surface-type.surface-type': ApiSurfaceTypeSurfaceType;
+      'api::user-analytic.user-analytic': ApiUserAnalyticUserAnalytic;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
