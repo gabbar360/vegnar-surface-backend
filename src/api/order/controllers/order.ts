@@ -20,10 +20,10 @@ export default factories.createCoreController('api::order.order', ({ strapi }) =
         key_secret: process.env.RAZORPAY_KEY_SECRET ? 'Present' : 'Missing'
       });
 
-      const { amount, currency = 'INR', full_name, email, phone_number, company, shipping_address, additional_message, number_of_samples, products } = ctx.request.body;
+      const { amount, currency = 'INR', full_name, email, phone_number, company, shipping_address, number_of_samples, products,pin_code,country } = ctx.request.body;
 
       // For now, make phone_number and number_of_samples optional to match frontend
-      if (!amount || !email || !full_name || !shipping_address) {
+      if (!amount || !email || !full_name || !shipping_address || !pin_code || !country) {
         return ctx.throw(400, 'Amount, email, full_name, and shipping_address are required');
       }
 
@@ -54,8 +54,9 @@ export default factories.createCoreController('api::order.order', ({ strapi }) =
           email,
           phone_number: phone_number || null,
           company: company || null,
+          pin_code: pin_code || null,
+          country: country || null,
           shipping_address,
-          additional_message,
           number_of_samples: number_of_samples || 1,
           notes: products ? JSON.stringify(products) : null,
         },
