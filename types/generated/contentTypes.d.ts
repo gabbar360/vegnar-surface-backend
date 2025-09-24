@@ -546,9 +546,9 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    additional_message: Schema.Attribute.Text;
     amount: Schema.Attribute.Integer & Schema.Attribute.Required;
     company: Schema.Attribute.String;
+    country: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -565,6 +565,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     notes: Schema.Attribute.JSON;
     number_of_samples: Schema.Attribute.Integer & Schema.Attribute.Required;
     phone_number: Schema.Attribute.String & Schema.Attribute.Required;
+    pin_code: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     razorpay_order_id: Schema.Attribute.String & Schema.Attribute.Required;
     razorpay_payment_id: Schema.Attribute.String;
