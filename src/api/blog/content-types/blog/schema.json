@@ -36,6 +36,9 @@
     },
     "meta_description": {
       "type": "string"
+    },
+    "keyword": {
+      "type": "text"
     }
   }
 }
